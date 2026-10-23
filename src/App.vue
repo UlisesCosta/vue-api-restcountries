@@ -4,26 +4,33 @@ import BuscadorPaises from './components/BuscadorPaises.vue'
 import ListaPaises from './components/ListaPaises.vue'
 
 const API_KEY = import.meta.env.API_KEY
+const URL_API = 'https://api.restcountries.com/countries/v5'
+
 const paises = ref([])
 const cargando = ref(true)
 const error = ref('')
 const busqueda = ref('')
 const region = ref('')
 
-onMounted(async () => {
+const cargar = async (params) =>  {
+  cargando.value = true
+  error.value = ''
   try {
-    const url = `https://api.restcountries.com/countries/v5?q=Canada&api-key=${API_KEY}`
-    const respuesta = await fetch(url)
-    if (!respuesta.ok) throw new Error('Respuesta no válida')
-    const datos = await respuesta.json()
-    console.log(datos)
-    paises.value = datos
+    const respuesta = await fetch(`${URL_API}?q=${encodeURIComponent(consulta)}`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    })
+    if (!respuesta.ok) throw new Error('Respuesta no valida de la api')
+    const json = await respuesta.json()
+    paises.value = json.data?.objects ?? []
   } catch (e) {
-    error.value = 'No fue posible obtener los datos de la API'
+    paises.value = []
+    error.value = 'Fallo al recuperar datos'
   } finally {
     cargando.value = false
   }
-})
+}
+
+onMounted(() => cargar('Mexico'))
 
 
 
