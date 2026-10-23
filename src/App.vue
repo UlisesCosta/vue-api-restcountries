@@ -34,8 +34,21 @@ onMounted(() => cargar('Mexico'))
 
 
 
-// porfa fredy esto es para que lo filtres 
-const filtrados = computed(() => paises.value)
+// Búsqueda por nombre: vuelve a consultar la API 400 ms después de dejar de escribir
+let temporizador
+watch(busqueda, (valor) => {
+  clearTimeout(temporizador)
+  temporizador = setTimeout(() => {
+    cargar(valor.trim() || 'Mexico')
+  }, 400)
+})
+
+// Filtro por región sobre los resultados cargados
+const filtrados = computed(() => {
+  if (!region.value) return paises.value
+  return paises.value.filter((p) => p.region === region.value)
+})
+
 </script>
 
 <template>
