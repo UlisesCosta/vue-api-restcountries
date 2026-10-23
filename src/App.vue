@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import BuscadorPaises from './components/BuscadorPaises.vue'
 import ListaPaises from './components/ListaPaises.vue'
 
@@ -12,27 +12,26 @@ const error = ref('')
 const busqueda = ref('')
 const region = ref('')
 
-const cargar = async (params) =>  {
+const cargar = async (consulta) => {
   cargando.value = true
   error.value = ''
   try {
     const respuesta = await fetch(`${URL_API}?q=${encodeURIComponent(consulta)}`, {
       headers: { Authorization: `Bearer ${API_KEY}` },
     })
-    if (!respuesta.ok) throw new Error('Respuesta no valida de la api')
+    if (!respuesta.ok) throw new Error('Respuesta no válida de la API')
     const json = await respuesta.json()
     paises.value = json.data?.objects ?? []
   } catch (e) {
     paises.value = []
-    error.value = 'Fallo al recuperar datos'
+    error.value = 'No fue posible obtener los datos de la API'
   } finally {
     cargando.value = false
   }
 }
 
+// Primera llamada: México
 onMounted(() => cargar('Mexico'))
-
-
 
 // Búsqueda por nombre: vuelve a consultar la API 400 ms después de dejar de escribir
 let temporizador
@@ -48,16 +47,26 @@ const filtrados = computed(() => {
   if (!region.value) return paises.value
   return paises.value.filter((p) => p.region === region.value)
 })
-
 </script>
 
 <template>
-  <h1>Explorador de Países</h1>
+  <header>
+    <h1>Explorador de Países</h1>
+    <p class="subtitulo">Consulta información de cualquier país con la API REST Countries.</p>
+  </header>
 
-  <BuscadorPaises v-model:busqueda="busqueda" v-model:region="region" />
+  <main>
+    <BuscadorPaises v-model:busqueda="busqueda" v-model:region="region" />
 
-  <p v-if="cargando" class="mensaje">Cargando países...</p>
-  <p v-else-if="error" class="mensaje">{{ error }}</p>
-  <p v-else-if="filtrados.length === 0" class="mensaje">No se encontraron resultados</p>
-  <ListaPaises v-else :paises="filtrados" />
+    <p v-if="!cargando && !error" class="resumen">
+      {{ filtrados.length }} {{ filtrados.length === 1 ? 'país encontrado' : 'países encontrados' }}
+    </p>
+
+    <p v-if="cargando" class="mensaje">Cargando países...</p>
+    <p v-else-if="error" class="mensaje">{{ error }}</p>
+    <p v-else-if="filtrados.length === 0" class="mensaje">No se encontraron resultados</p>
+    <ListaPaises v-else :paises="filtrados" />
+  </main>
+
+  <footer>Datos de REST Countries</footer>
 </template>

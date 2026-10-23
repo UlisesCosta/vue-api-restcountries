@@ -13,12 +13,17 @@ const regiones = [
 </script>
 
 <template>
-  <div>
-    <input v-model="busqueda" type="search" placeholder="Buscar país..." aria-label="Buscar país" autocomplete="off" />
-    <select v-model="region" aria-label="Filtrar por región">
-    <option value="">Todas las regiones</option>
-    <option v-for="r in regiones" :key="r.valor" :value="r.valor">{{ r.nombre }}</option>
-    </select>
-  </div>
-  
+  <section class="filtros">
+    <label>
+      Buscar
+      <input v-model="busqueda" type="search" placeholder="Nombre o capital" autocomplete="off" />
+    </label>
+    <label>
+      Región
+      <select v-model="region">
+        <option value="">Todas las regiones</option>
+        <option v-for="r in regiones" :key="r.valor" :value="r.valor">{{ r.nombre }}</option>
+      </select>
+    </label>
+  </section>
 </template>
