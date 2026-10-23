@@ -1,0 +1,42 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #fff;
+    color: #222;
+    font-family: system-ui, sans-serif;
+    line-height: 1.5;
+}
+
+#app {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+h1 {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin: 0 0 1.5rem;
+}
+
+input,
+select {
+    font: inherit;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+}
+
+.mensaje {
+  color: #666;
+}
+
+.tarjeta {
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    padding: 1rem;
+    }
