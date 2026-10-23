@@ -24,6 +24,9 @@ onMounted(async () => {
     cargando.value = false
   }
 })
+
+
+
 // porfa fredy esto es para que lo filtres 
 const filtrados = computed(() => paises.value)
 </script>
