@@ -15,4 +15,6 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  base:"/vue-api-restcountries/",
+  envPrefix:"API_"
 })
